@@ -1,8 +1,8 @@
-# Ticket #7: Dropbox API Integration & Audio Recording
+# Ticket #7: Microphone Recording & Permission Handling
 
 ## Description
 
-Implement HTML5 Audio API for microphone recording and integrate Dropbox API for secure authentication and file upload capabilities.
+Implement browser-based microphone recording using the HTML5 MediaRecorder API. Recording should begin from the Record button in `src/components/AnsweringMachine.tsx` after requesting microphone permissions, and stop when the user presses Stop or when a configurable time limit is reached. Show clear user feedback for permission prompts, errors, and when the time limit triggers an automatic stop.
 
 ## Priority
 
@@ -11,97 +11,31 @@ High - Core functionality
 ## Dependencies
 
 - Ticket #1: Project Setup (dependencies needed)
-- Ticket #2: Deployment Configuration (environment variables needed)
+- Ticket #4: Recording Controls UI (Record/Stop buttons in `AnsweringMachine.tsx`)
 
 ## Acceptance Criteria
 
-### Audio Recording Implementation
-
-- [ ] Implement microphone access using HTML5 MediaRecorder API
-- [ ] Handle browser microphone permission requests
-- [ ] Create audio recording functionality with start/stop controls
-- [ ] Implement real-time recording duration tracking
-- [ ] Set up audio input level monitoring (for visual feedback)
-- [ ] Handle microphone access denied scenarios gracefully
-
-### Browser Compatibility
-
-- [ ] Test audio recording on Chrome, Firefox, Safari, Edge
-- [ ] Implement fallbacks for older browsers where possible
-- [ ] Handle browser-specific audio format differences
-- [ ] Test on mobile browsers (iOS Safari, Android Chrome)
-- [ ] Provide clear error messages for unsupported browsers
-
-### Dropbox API Integration
-
-- [ ] Set up Dropbox App and obtain API credentials
-- [ ] Implement Dropbox OAuth2 authentication flow
-- [ ] Create secure token management system
-- [ ] Set up API client for file upload operations
-- [ ] Handle Dropbox API rate limits and errors
-- [ ] Implement token refresh mechanism if needed
-
-### Security & Authentication
-
-- [ ] Secure API key management (environment variables)
-- [ ] Implement client-side token generation if needed
-- [ ] Ensure no sensitive credentials are exposed to client
-- [ ] Set up proper CORS configuration
-- [ ] Handle authentication errors gracefully
-- [ ] Implement secure upload URL generation
-
-### Audio Format Configuration
-
-- [ ] Configure recording format (WAV initially for quality)
-- [ ] Set appropriate sample rate and bit depth
-- [ ] Prepare for MP3 conversion integration
-- [ ] Ensure audio quality meets requirements
-- [ ] Test audio quality across different devices
-
-### Error Handling
-
-- [ ] Handle microphone permission denied
-- [ ] Manage network connectivity issues
-- [ ] Handle Dropbox authentication failures
-- [ ] Provide user-friendly error messages
-- [ ] Implement retry mechanisms for transient failures
-- [ ] Log errors appropriately for debugging
-
-### File Management
-
-- [ ] Generate unique filenames with timestamps
-- [ ] Set up proper file naming convention (message-YYYY-MM-DD_HH-MM-SS)
-- [ ] Configure upload to specific Dropbox folder
-- [ ] Handle file size limitations
-- [ ] Implement upload progress tracking
-
-### Performance Considerations
-
-- [ ] Optimize memory usage during recording
-- [ ] Handle large audio files efficiently
-- [ ] Implement streaming upload where possible
-- [ ] Monitor and optimize upload speeds
-- [ ] Test performance on slower devices
+- [ ] Clicking the Record button in `src/components/AnsweringMachine.tsx` requests microphone access via `navigator.mediaDevices.getUserMedia({ audio: true })` if permission has not yet been granted.
+- [ ] If permission is granted, recording starts using the MediaRecorder API (audio-only) and the UI reflects the recording state (`isRecording = true`).
+- [ ] If permission is denied or an error occurs (e.g., insecure context, device unavailable, unsupported browser), a user-friendly error message is shown and recording does not start. The app state records `hasPermission = false` in this case.
+- [ ] The Stop button stops the recording immediately, finalizes the audio Blob, and updates state so the audio is available for subsequent features (e.g., playback or upload in future tickets).
+- [ ] A configurable maximum duration limit is enforced (found in environment variable). Recording stops automatically once the limit is reached.
+- [ ] When the maximum duration is reached, the user is clearly informed that the limit was reached (e.g., inline message or toast), and the recording is finalized.
+- [ ] While recording, basic duration tracking is maintained in state (e.g., seconds elapsed) to support simple UI feedback.
+- [ ] The Record button is disabled while recording is active, and the Stop button is enabled only during recording.
+- [ ] Works on modern browsers (Chrome, Firefox, Safari, Edge). Safari-specific constraints are handled (e.g., secure context requirement). When unsupported, an informative message is displayed.
 
 ## Technical Notes
 
-- Use MediaRecorder API for recording (supported in modern browsers)
-- Implement proper error boundaries for audio functionality
-- Consider using Web Workers for audio processing if needed
-- Plan for future MP3 encoding integration
-- Ensure HTTPS is required for microphone access
-
-## Environment Variables Required
-
-- `DROPBOX_APP_KEY` - Dropbox application key
-- `DROPBOX_APP_SECRET` - Dropbox application secret
-- `DROPBOX_ACCESS_TOKEN` - Access token for uploads
+- Use `MediaRecorder` for capture and `getUserMedia` for permissions; store resulting audio as a Blob in state.
+- Ensure implementation handles: permission denied, insecure context (non-HTTPS), device-not-found, and MediaRecorder unsupported.
+- Maintain recording state in the existing `useAudioRecorder` hook (`recordingState`, `startRecording`, `stopRecording`).
+- Track duration in state with a timer that resets on stop.
 
 ## Definition of Done
 
-- Audio recording works reliably across target browsers
-- Dropbox API integration is secure and functional
-- File uploads complete successfully to designated folder
-- Error handling provides clear user feedback
-- Performance is acceptable on target devices
-- Security best practices are implemented
+- Recording starts from the Record button after permission is granted and stops via Stop or on hitting the time limit.
+- The user is notified when the time limit stops the recording.
+- Permission and runtime errors are handled gracefully with clear messages; the app does not crash.
+- State reflects permission status, recording status, duration, and captured audio Blob.
+- Behavior verified manually on latest Chrome, Firefox, Safari, and Edge.

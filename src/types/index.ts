@@ -4,11 +4,12 @@
 
 export interface RecordingState {
   isRecording: boolean;
-  isPaused: boolean;
-  duration: number;
+  recordingStartTime: number | null;
+  recordingEndTime: number | null;
   audioBlob: Blob | null;
-  uploadStatus: "idle" | "uploading" | "success" | "error";
   hasPermission: boolean | null;
+  errorMessage?: string | null;
+  infoMessage?: string | null;
 }
 
 export interface AudioRecorderProps {

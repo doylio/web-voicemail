@@ -53,3 +53,15 @@ export class RecordingLimitManager {
     return Math.max(0, this.MAX_RECORDINGS - this.getRecordingCount());
   }
 }
+
+/**
+ * Reads the maximum recording duration from environment, defaults to 600s (10 min)
+ */
+export function getMaxRecordingDurationSeconds(): number {
+  const envValue = process.env.NEXT_PUBLIC_MAX_RECORDING_SECONDS;
+  const parsed = envValue ? Number(envValue) : NaN;
+  if (Number.isFinite(parsed) && parsed > 0) {
+    return Math.floor(parsed);
+  }
+  return 600;
+}
