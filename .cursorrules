@@ -1,0 +1,62 @@
+# Cursor Rules for Skeuomorphic Answering Machine Web App
+
+## Code Quality and Linting
+
+### Always Fix Lint and Prettier Errors
+
+- After any code modifications, always run `npm run check` to ensure code quality
+- Ensure all code passes linting and TypeScript checks before considering a task complete
+- Use the `read_lints` tool to check for TypeScript and ESLint errors in specific files
+- If you encounter linting errors:
+  1. First try to auto-fix with `npm run check`
+  2. For remaining errors, manually fix them according to the project's ESLint configuration
+  3. Never disable or ignore ESLint rules without explicit user permission
+
+### TypeScript and Code Standards
+
+- Maintain strict TypeScript compliance - no `any` types allowed
+- Follow the coding style guide in `docs/CODING_STYLE_GUIDE.md`
+- All functions must have explicit return types
+- Use interfaces for object shapes, types for unions/primitives
+- Import ordering must follow the configured ESLint rules:
+  1. Node.js built-in modules
+  2. External npm packages
+  3. Internal modules (using @/ alias)
+  4. Relative imports (parent, sibling, index)
+- Maintain consistent import/export patterns
+
+### File Organization
+
+- Follow the established project structure:
+  - `/src/components` - React components
+  - `/src/hooks` - Custom React hooks
+  - `/src/lib` - Utility functions
+  - `/src/types` - TypeScript definitions
+  - `/src/styles` - CSS modules for skeuomorphic styling
+- Use proper naming conventions as defined in the style guide
+
+### Development Workflow
+
+- Always run `npm run check` after significant changes to ensure code quality
+- Before completing any task, ensure:
+  1. No ESLint errors or warnings
+  2. No TypeScript compilation errors
+  3. Code is properly formatted with Prettier
+  4. All imports are correctly ordered
+  5. No unused variables or imports (unless prefixed with \_)
+- Use `npm run check` as the primary code quality verification command
+
+## Skeuomorphic Design Principles
+
+- Maintain the realistic, nostalgic interface design
+- Use CSS modules for component-specific styling
+- Implement smooth animations and transitions for user interactions
+- Focus on browser-based audio recording with direct Dropbox upload
+- Keep the interface simple and intuitive for visitors
+
+## Error Handling
+
+- Always handle async operations properly
+- Provide graceful fallbacks for audio permission issues
+- Handle localStorage access errors appropriately
+- Include proper error boundaries and user feedback
