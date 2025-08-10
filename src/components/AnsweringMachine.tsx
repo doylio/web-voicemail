@@ -6,13 +6,15 @@
 import Image from "next/image";
 import React from "react";
 
+import tapeRecorderImg from "@/assets/recorder_nowheels.png";
+import tapeRecorderWheelsImg from "@/assets/recorder_WHEEL.png";
+
 import styles from "./AnsweringMachine.module.css";
-import tapeRecorderImg from "./TAPERECORDER.png";
 
 interface AnsweringMachineProps {
   className?: string;
-  onRecord?: () => void;
-  onStop?: () => void;
+  onRecord: () => void;
+  onStop: () => void;
   isRecording?: boolean;
 }
 
@@ -20,16 +22,8 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
   className = "",
   onRecord,
   onStop,
-  isRecording = false,
+  isRecording,
 }) => {
-  const handleRecord = (): void => {
-    if (onRecord) onRecord();
-  };
-
-  const handleStop = (): void => {
-    if (onStop) onStop();
-  };
-
   return (
     <div className={`${styles.container} ${className}`}>
       <Image
@@ -39,13 +33,32 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
         priority
       />
 
+      <Image
+        src={tapeRecorderWheelsImg}
+        alt="Vintage tape recorder answering machine"
+        className={`${styles.recorderWheel} ${styles.leftWheel} ${
+          isRecording ? styles.spinningWheel : ""
+        }`}
+        priority
+      />
+
+      <Image
+        src={tapeRecorderWheelsImg}
+        alt="Vintage tape recorder answering machine"
+        className={`${styles.recorderWheel} ${styles.rightWheel} ${
+          isRecording ? styles.spinningWheel : ""
+        }`}
+        priority
+      />
+
       <div className={styles.controlsOverlay} aria-label="Controls">
         <button
           type="button"
           className={`${styles.controlButton} ${styles.recordButton} ${
             isRecording ? styles.pressed : ""
           }`}
-          onClick={handleRecord}
+          onClick={onRecord}
+          disabled={isRecording}
           aria-label="Record"
           aria-pressed={isRecording}
         >
@@ -56,7 +69,8 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
         <button
           type="button"
           className={`${styles.controlButton} ${styles.stopButton}`}
-          onClick={handleStop}
+          onClick={onStop}
+          disabled={!isRecording}
           aria-label="Stop"
         >
           <span aria-hidden="true" style={{ transform: "translateY(-0.08em)" }}>

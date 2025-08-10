@@ -4,6 +4,7 @@
   width: 100%;
   max-width: 560px;
   margin: 0 auto;
+  display: block;
 }
 
 .image {
@@ -11,6 +12,39 @@
   width: 100%;
   height: auto;
   border-radius: 8px;
+}
+
+.recorderWheel {
+  display: block;
+  position: absolute;
+  top: 29.7%;
+  z-index: 1;
+  width: 100px;
+  height: auto;
+  border-radius: 8px;
+  /* Ensure rotation pivots around the visual center */
+  transform-origin: 50% 50%;
+}
+
+.spinningWheel {
+  animation: spin 2.5s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.leftWheel {
+  left: 27.8%;
+}
+
+.rightWheel {
+  right: 27.8%;
 }
 
 /* Controls overlayed on bottom half */
