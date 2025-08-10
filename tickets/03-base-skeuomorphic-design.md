@@ -2,7 +2,7 @@
 
 ## Description
 
-Create the main skeuomorphic answering machine interface with realistic styling that resembles a physical answering machine device.
+Create a simplified skeuomorphic answering machine interface with essential visual elements that resemble a classic physical answering machine device.
 
 ## Priority
 
@@ -14,46 +14,39 @@ High - Core visual foundation
 
 ## Acceptance Criteria
 
-### Layout Structure
+### Main Device Structure
 
-- [ ] Create main answering machine component with proper proportions
+- [ ] Create rectangular device body with rounded edges
+- [ ] Apply realistic depth with CSS shadows and gradients
 - [ ] Design centered layout that works on various screen sizes
-- [ ] Implement proper spacing and padding for realistic device appearance
-- [ ] Create container with appropriate width/height ratios
+- [ ] Use classic answering machine color scheme (beige/grey tones)
 
-### Visual Design Elements
+### Cassette Tape Section
 
-- [ ] Apply realistic textures and materials:
-  - Brushed metal or plastic finish
-  - Subtle gradients for depth
-  - Realistic shadows and highlights
-  - Border radius for rounded corners
-- [ ] Create depth with CSS box-shadows and layering
-- [ ] Implement proper color scheme (classic answering machine colors)
-- [ ] Add subtle noise or grain texture for authenticity
+- [ ] Design cassette tape visual in the center of the device
+- [ ] Create two circular tape reels/wheels within the cassette
+- [ ] Implement spinning animation for the wheels during recording
+- [ ] Style cassette with realistic depth and shadows
 
-### Device Shape & Structure
+### Control Buttons
 
-- [ ] Design rectangular device body with realistic proportions
-- [ ] Create raised button areas and recessed display area
-- [ ] Add device feet/base for grounding
-- [ ] Include subtle device branding area or logo space
-- [ ] Design ventilation grilles or speaker mesh areas
+- [ ] Design two circular buttons beneath the cassette tape
+- [ ] Create "Record" button with appropriate styling and icon
+- [ ] Create "Stop" button with appropriate styling and icon
+- [ ] Apply tactile button effects (raised appearance, hover states)
 
-### Visual Polish
+### Text Display Area
 
-- [ ] Ensure design feels tactile and three-dimensional
-- [ ] Add subtle hover effects for interactive elements
-- [ ] Implement proper contrast for accessibility
-- [ ] Create consistent design language throughout
-- [ ] Test visual appearance in different lighting conditions
+- [ ] Add small text section at the top of the device
+- [ ] Style as a simple digital display or label area
+- [ ] Ensure text is readable and properly sized
 
-### Responsive Foundation
+### Recording Indicator
 
-- [ ] Ensure base design scales appropriately
-- [ ] Maintain aspect ratio across different screen sizes
-- [ ] Plan for mobile adaptation without losing skeuomorphic feel
-- [ ] Test on various device types and orientations
+- [ ] Implement blinking red light to indicate recording status
+- [ ] Position indicator prominently on the device
+- [ ] Create smooth blinking animation (on/off cycle)
+- [ ] Ensure indicator is clearly visible during recording
 
 ## Technical Notes
 

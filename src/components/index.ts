@@ -4,4 +4,3 @@
 
 export { AnsweringMachine } from "./AnsweringMachine";
 export { RecordingButton } from "./RecordingButton";
-export { DigitalDisplay } from "./DigitalDisplay";

@@ -1,46 +1,68 @@
+"use client";
 /**
  * Main answering machine component that provides the skeuomorphic interface
  */
 
+import Image from "next/image";
 import React from "react";
+
+import styles from "./AnsweringMachine.module.css";
+import tapeRecorderImg from "./TAPERECORDER.png";
 
 interface AnsweringMachineProps {
   className?: string;
+  onRecord?: () => void;
+  onStop?: () => void;
+  isRecording?: boolean;
 }
 
 export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
   className = "",
+  onRecord,
+  onStop,
+  isRecording = false,
 }) => {
+  const handleRecord = (): void => {
+    if (onRecord) onRecord();
+  };
+
+  const handleStop = (): void => {
+    if (onStop) onStop();
+  };
+
   return (
-    <div className={`answering-machine ${className}`}>
-      <div className="machine-body">
-        <h1>Skeuomorphic Answering Machine</h1>
-        <p>Placeholder for the main answering machine interface</p>
+    <div className={`${styles.container} ${className}`}>
+      <Image
+        src={tapeRecorderImg}
+        alt="Vintage tape recorder answering machine"
+        className={styles.image}
+        priority
+      />
 
-        {/* Digital Display */}
-        <div className="digital-display">
-          <span>00:00</span>
-        </div>
-
-        {/* Control Buttons */}
-        <div className="control-buttons">
-          <button className="record-button">Record</button>
-          <button className="play-button" disabled>
-            Play
-          </button>
-          <button className="stop-button" disabled>
-            Stop
-          </button>
-          <button className="rewind-button" disabled>
-            Rewind
-          </button>
-        </div>
-
-        {/* Tape Reels */}
-        <div className="tape-reels">
-          <div className="reel left-reel"></div>
-          <div className="reel right-reel"></div>
-        </div>
+      <div className={styles.controlsOverlay} aria-label="Controls">
+        <button
+          type="button"
+          className={`${styles.controlButton} ${styles.recordButton} ${
+            isRecording ? styles.pressed : ""
+          }`}
+          onClick={handleRecord}
+          aria-label="Record"
+          aria-pressed={isRecording}
+        >
+          <span style={{ transform: "translateY(-0.06em)" }} aria-hidden="true">
+            ●
+          </span>
+        </button>
+        <button
+          type="button"
+          className={`${styles.controlButton} ${styles.stopButton}`}
+          onClick={handleStop}
+          aria-label="Stop"
+        >
+          <span aria-hidden="true" style={{ transform: "translateY(-0.08em)" }}>
+            ■
+          </span>
+        </button>
       </div>
     </div>
   );
