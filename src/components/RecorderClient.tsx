@@ -13,6 +13,7 @@ export default function RecorderClient(): React.JSX.Element {
     startRecordingTime,
     error,
     info,
+    hitMaxDuration,
   } = useAudioRecorder();
 
   return (
@@ -23,6 +24,7 @@ export default function RecorderClient(): React.JSX.Element {
       startRecordingTime={startRecordingTime}
       error={error}
       info={info}
+      hitMaxDuration={hitMaxDuration}
     />
   );
 }

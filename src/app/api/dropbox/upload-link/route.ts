@@ -22,9 +22,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       fetch: fetch,
     });
 
+    const folderPath = process.env.DROPBOX_FOLDER_PATH || "";
+    const fullPath = `${folderPath}/${filename}`;
+
+    // Generate temporary upload link
     const response = await dropbox.filesGetTemporaryUploadLink({
       commit_info: {
-        path: filename,
+        path: fullPath,
         mode: { ".tag": "add" },
         autorename: true,
       },
@@ -33,7 +37,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       uploadUrl: response.result.link,
-      path: filename,
+      path: fullPath,
     });
   } catch (error) {
     console.error("Dropbox upload link generation failed:", error);
