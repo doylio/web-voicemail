@@ -67,7 +67,6 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
           className={`${styles.recorderWheel} ${styles.leftWheel} ${
             isRecording ? styles.spinningWheel : ""
           }`}
-          priority
         />
 
         <Image
@@ -76,7 +75,6 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
           className={`${styles.recorderWheel} ${styles.rightWheel} ${
             isRecording ? styles.spinningWheel : ""
           }`}
-          priority
         />
 
         <div className={styles.controlsOverlay} aria-label="Controls">
