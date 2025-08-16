@@ -19,6 +19,7 @@ interface AnsweringMachineProps {
   startRecordingTime: number | null;
   error: string | null;
   info: string | null;
+  hitMaxDuration: boolean;
 }
 
 export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
@@ -29,6 +30,7 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
   startRecordingTime,
   error,
   info,
+  hitMaxDuration,
 }) => {
   const [nowTs, setNowTs] = useState<number>(Date.now());
 
@@ -116,6 +118,12 @@ export const AnsweringMachine: React.FC<AnsweringMachineProps> = ({
         {startRecordingTime && (
           <div className={`${styles.footerText} ${styles.durationText}`}>
             {formatDuration(startRecordingTime)}
+          </div>
+        )}
+
+        {hitMaxDuration && (
+          <div className={`${styles.footerText} ${styles.infoText}`}>
+            Message length limit reached
           </div>
         )}
 
