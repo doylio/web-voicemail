@@ -6,7 +6,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useReactMediaRecorder } from "react-media-recorder";
+// import { useAudioRecorder as useReactAudioRecorder } from "react-audio-voice-recorder";
+// import MicRecorder from "mic-recorder-to-mp3";
 
+import { uploadRecordingToDropbox } from "@/lib/dropboxUtils";
 import { getMaxRecordingDurationSeconds } from "@/lib/recordingLimits";
 
 interface UseAudioRecorderReturn {
@@ -14,6 +17,7 @@ interface UseAudioRecorderReturn {
   error: string | null;
   info: string | null;
   isRecording: boolean;
+  isUploading: boolean;
   startRecording: () => void;
   stopRecording: () => void;
 }
@@ -33,6 +37,7 @@ export function useAudioRecorder(): UseAudioRecorderReturn {
   const maxDurationMs = maxDurationSeconds * 1000;
 
   const [info, setInfo] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [startRecordingTime, setStartRecordingTime] = useState<number | null>(
     null
@@ -45,7 +50,7 @@ export function useAudioRecorder(): UseAudioRecorderReturn {
     audio: true,
     blobPropertyBag: { type: "audio/webm" },
     onStop: (blobUrl, blob) => {
-      downloadRecording(blobUrl, blob);
+      uploadRecording(blob);
       setIsRecordingEarly(false);
       if (durationTimerRef.current !== null) {
         window.clearInterval(durationTimerRef.current);
@@ -86,25 +91,21 @@ export function useAudioRecorder(): UseAudioRecorderReturn {
     }
   }, [mediaRecorder.error]);
 
-  const downloadRecording = useCallback((blobUrl: string, blob: Blob): void => {
+  const uploadRecording = useCallback(async (blob: Blob): Promise<void> => {
     try {
+      setIsUploading(true);
+      setInfo("Saving your message...");
+
       const filename = makeFilename(blob.type || "audio/webm");
-      const url = blobUrl || URL.createObjectURL(blob);
+      const dropboxPath = await uploadRecordingToDropbox(blob, filename);
 
-      const anchor = document.createElement("a");
-      anchor.href = url;
-      anchor.download = filename;
-      document.body.appendChild(anchor);
-      anchor.click();
-      document.body.removeChild(anchor);
-
-      // Revoke object URL shortly after to free memory (if we created one)
-      if (!blobUrl) {
-        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-      }
-    } catch {
-      // Fallback: surface a user-readable error without leaking internal details
-      setInfo("Failed to download recording");
+      setInfo("Message saved successfully!");
+      console.log(`Recording uploaded to: ${dropboxPath}`);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setInfo("Failed to save your message. Please try again.");
+    } finally {
+      setIsUploading(false);
     }
   }, []);
 
@@ -131,11 +132,16 @@ export function useAudioRecorder(): UseAudioRecorderReturn {
     mediaRecorder.startRecording();
   }, [mediaRecorder, setIsRecordingEarly]);
 
+  const stopRecording = useCallback(() => {
+    mediaRecorder.stopRecording();
+  }, [mediaRecorder]);
+
   return {
     startRecordingTime,
     error: mediaRecorder.error,
     info,
     isRecording: isRecordingEarly || mediaRecorder.status === "recording",
+    isUploading,
     startRecording,
     stopRecording: mediaRecorder.stopRecording,
   };
