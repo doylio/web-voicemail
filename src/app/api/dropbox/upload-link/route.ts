@@ -17,20 +17,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Initialize Dropbox client with app credentials
     const dropbox = new Dropbox({
       accessToken: process.env.DROPBOX_ACCESS_TOKEN,
       fetch: fetch,
     });
 
-    // Generate folder path (default to /voicemail-messages if not specified)
-    const folderPath = process.env.DROPBOX_FOLDER_PATH || "/voicemail-messages";
-    const fullPath = `${folderPath}/${filename}`;
-
-    // Generate temporary upload link
     const response = await dropbox.filesGetTemporaryUploadLink({
       commit_info: {
-        path: fullPath,
+        path: filename,
         mode: { ".tag": "add" },
         autorename: true,
       },
@@ -39,7 +33,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       uploadUrl: response.result.link,
-      path: fullPath,
+      path: filename,
     });
   } catch (error) {
     console.error("Dropbox upload link generation failed:", error);
