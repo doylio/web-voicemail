@@ -40,6 +40,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       path: fullPath,
     });
   } catch (error) {
+    console.log(JSON.stringify(error, null, 2));
     console.error("Dropbox upload link generation failed:", error);
 
     // Return a user-friendly error without exposing internal details
